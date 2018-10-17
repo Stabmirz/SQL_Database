@@ -4,7 +4,7 @@ SELECT C.code,SCP.grade
 FROM class C
 JOIN student_class_professor SCP
 ON C.id=SCP.class_id_fk
-ORDER BY student_id_fk
+WHERE student_id_fk = 1
 
 
 2.Display a list of all graduate students (the ones who has finished all classes)
@@ -22,14 +22,15 @@ HAVING  COUNT(SCP.class_id_fk)= 10
 
 3.Based on a Faculty ID, display a list of all the courses he or she has taught and the number of times taught and sorted by the ones taught the most.
 
-SELECT P.id,C.code,COUNT(SCP.class_id_fk) AS Total_Count
+SELECT C.code,COUNT(SCP.class_id_fk) AS Total_Count
 FROM class C 
 JOIN student_class_professor SCP
 JOIN professor P
 ON C.id = SCP.class_id_fk
 AND P.id = SCP.professor_id_fk
-GROUP BY SCP.class_id_fk,SCP.professor_id_fk
-ORDER BY P.id,Total_count DESC
+where SCP.professor_id_fk = 1
+GROUP BY SCP.class_id_fk
+ORDER BY Total_count DESC
 
 
 4.Display a list of all the student’s name and GPA, starting by the greatest GPAs.
@@ -61,7 +62,7 @@ ORDER BY S.registration_date DESC
 
 6.Display the professor name, tenure and current class, grouped by the professor’s department.
 
-SELECT P.name as professor_name, P.tenure, C.code  as current_course
+SELECT P.name as professor_name, P.tenure,P.department, C.code  as current_course
 FROM professor P
 JOIN class C
 JOIN student S
@@ -75,20 +76,6 @@ GROUP BY P.department
 
 7.Display name, description and current professor for all the classes offered (the ones having at least one student registered).
 
-SELECT C.name As Class_Name, C.description as Discription, P.name as Professor_Name, COUNT(SCP.student_id_fk) as Total_Student
-FROM class C 
-JOIN professor P 
-JOIN student S 
-JOIN student_class_professor SCP 
-ON P.id= SCP.professor_id_fk 
-AND S.id=SCP.student_id_fk 
-AND C.id= SCP.class_id_fk 
-GROUP BY SCP.class_id_fk 
-HAVING Total_Student > 0
-
-
-
-correction
 
 
 SELECT C.name As Class_Name, C.description as Discription, P.name as Professor_Name, COUNT(SCP.student_id_fk) as Total_Student
